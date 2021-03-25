@@ -1,0 +1,47 @@
+pipeline {
+    
+    agent {
+        docker {
+            image 'node:6-alpine'
+            args '-p 3000:3000 -p 5000:5000' 
+        }
+    }
+
+    environment {
+        APP_DOCKER_TAG = 'sprptcl-img'
+    }
+
+// We can use either environment section or parameters but parameters are usually used for parametrized builds
+//   parameters {
+//        string(name: 'APP_DOCKER_TAG', defaultValue: 'sprptcl-img', description: 'Spring petclinic maven docker image for deployment')
+//    }
+    
+    stages {
+        stage('compile') {
+            steps {
+                sh './mvnw compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh './mvnw test'
+            }
+        }
+        stage('package') {
+            steps {
+                sh './mvnw package'
+            }
+        }
+    }
+
+    post {
+        success {
+            sh "docker build -t ${APP_DOCKER_TAG} ."
+            sh "docker push localhost:5000/${APP_DOCKER_TAG}"
+        }
+        failure {
+            echo "Build failed! image won't be deployed."
+        }
+    }
+ 
+}

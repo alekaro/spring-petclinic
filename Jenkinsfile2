@@ -1,0 +1,21 @@
+pipeline {
+
+    agent any
+
+    parameters {
+        string(name: 'APP_DOCKER_TAG', defaultValue: 'sprptcl-img', description: 'Spring-petclinic-maven docker image for deployment')
+    }
+    
+    stages{
+        stage('run') {
+            steps {
+                sh "docker run -d -p 8090:8080 localhost:5000/${APP_DOCKER_TAG}"
+            }
+        }
+    }
+    post {
+        success {
+            echo "Build deployed successfull! Can be accessed on localhost:8090"
+        }
+    }
+}
