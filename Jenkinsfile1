@@ -33,8 +33,8 @@ pipeline {
 
     post {
         success {
-            sh "docker build -t ${APP_DOCKER_TAG} ."
-            sh "docker push localhost:5000/${APP_DOCKER_TAG}"
+            sh "sudo docker build -t ${APP_DOCKER_TAG} ."
+            sh "sudo docker push localhost:5000/${APP_DOCKER_TAG}"
         }
         failure {
             echo "Build failed! image won't be deployed."
