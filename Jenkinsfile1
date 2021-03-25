@@ -1,8 +1,6 @@
 pipeline {
     
-    agent {
-        docker { image 'openjdk:8' }
-    }
+    agent any
 
     environment {
         APP_DOCKER_TAG = 'sprptcl-img'
