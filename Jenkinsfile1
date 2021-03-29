@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        APP_DOCKER_TAG = 'sprptcl-img'
+        APP_DOCKER_TAG = 'localhost:5000/sprptcl-img'
     }
 
 // We can use either environment section or parameters but parameters are usually used for parametrized builds
@@ -22,7 +22,7 @@ pipeline {
     post {
         success {
             sh "docker build -t ${APP_DOCKER_TAG} ."
-            sh "docker push localhost:5000/${APP_DOCKER_TAG}"
+            sh "docker push ${APP_DOCKER_TAG}"
         }
         failure {
             echo "Build failed! image won't be deployed."
@@ -30,3 +30,4 @@ pipeline {
     }
  
 }
+
